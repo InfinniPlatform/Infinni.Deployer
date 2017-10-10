@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Infinni.Deployer": {
+      "commandName": "Project",
+      "commandLineArgs": "list -i Habinet"
+    }
+  }
+}
