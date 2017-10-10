@@ -2,8 +2,8 @@
 
 namespace Infinni.Deployer.CommandOptions
 {
-    [Verb("start", HelpText = "Starts application.")]
-    public class StartOptions : ICommandOptions
+    [Verb("stop", HelpText = "Stops application.")]
+    public class StopOptions : ICommandOptions
     {
         [Option('i', "packageId", HelpText = "Application package id.")]
         public string PackageId { get; set; }

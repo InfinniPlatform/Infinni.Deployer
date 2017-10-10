@@ -27,7 +27,7 @@ namespace Infinni.Deployer.CommandHandlers
 
             try
             {
-                Log.Information("Deleting application {Name} {Version}", options.PackageId, options.Version);
+                Log.Information("Deleting application {PackageId} {Version}", options.PackageId, options.Version);
 
                 Directory.Delete(appDirectoryPath, true);
             }

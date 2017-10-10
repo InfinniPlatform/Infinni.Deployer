@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using CommandLine;
@@ -27,11 +29,14 @@ namespace Infinni.Deployer
                 .Wait();
         }
 
-        private static Task ParseCommandLine(string[] args)
+        private static Task ParseCommandLine(IEnumerable<string> args)
         {
-            var optionTypes = new[] {typeof(InstallOptions), typeof(ListOptions), typeof(AppsOptions), typeof(UninstallOptions), typeof(StartOptions)};
+            var optionTypes = typeof(Program).Assembly.GetTypes()
+                                             .Where(t => t.IsClass && t.IsAssignableTo<ICommandOptions>())
+                                             .ToArray();
 
             var result = Parser.Default.ParseArguments(args, optionTypes);
+
 
             var parsed = result as Parsed<object>;
 
@@ -63,6 +68,11 @@ namespace Infinni.Deployer
             if (parsed.Value is StartOptions startOptions)
             {
                 return AppBuilder.Resolver.Resolve<ICommandHandler<StartOptions>>().Handle(startOptions);
+            }
+
+            if (parsed.Value is StopOptions stopOptions)
+            {
+                return AppBuilder.Resolver.Resolve<ICommandHandler<StopOptions>>().Handle(stopOptions);
             }
 
             throw new InvalidOperationException();

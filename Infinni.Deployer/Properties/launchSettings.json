@@ -2,7 +2,7 @@
   "profiles": {
     "Infinni.Deployer": {
       "commandName": "Project",
-      "commandLineArgs": "list -i Habinet"
+      "commandLineArgs": "stop -i Habinet -v 2.0.0.151"
     }
   }
 }

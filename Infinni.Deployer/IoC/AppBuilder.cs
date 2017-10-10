@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using Infinni.Deployer.CommandHandlers;
+using Infinni.Deployer.CommandOptions;
 using Infinni.Deployer.Logging;
 using Infinni.Deployer.Settings;
 using Newtonsoft.Json;
@@ -21,9 +23,9 @@ namespace Infinni.Deployer.IoC
 
             var builder = new ContainerBuilder();
 
-
-            builder.RegisterCommandHandlers(assembly);
             builder.RegisterSettings();
+            builder.RegisterCommandHandlers(assembly);
+            builder.RegisterCommandOptions(assembly);
 
             builder.RegisterType<NugetLogger>()
                    .As<ILogger>()
@@ -52,6 +54,18 @@ namespace Infinni.Deployer.IoC
             builder.RegisterAssemblyTypes(assembly)
                    .AsClosedTypesOf(typeof(ICommandHandler<>))
                    .SingleInstance();
+        }
+
+        private static void RegisterCommandOptions(this ContainerBuilder builder, Assembly assembly)
+        {
+            var options = assembly.GetTypes().Where(t => t.IsAssignableTo<ICommandOptions>());
+
+            foreach (var option in options)
+            {
+                builder.RegisterType(option)
+                       .As<ICommandOptions>()
+                       .SingleInstance();
+            }
         }
 
         public static void InitializeLogger()
