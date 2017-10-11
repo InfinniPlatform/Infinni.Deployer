@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Infinni.Deployer.ApplicationHelpers;
 using Infinni.Deployer.CommandOptions;
 using Infinni.Deployer.Helpers;
 using Serilog;
@@ -12,11 +13,12 @@ namespace Infinni.Deployer.CommandHandlers
     {
         public Task Handle(StopOptions options)
         {
+            const string processName = "dotnet";
             var appDirectoryName = AppsHelper.GetAppDirectoryName(options.PackageId, options.Version);
 
             Log.Information("Stopping application {AppDirectoryName}", appDirectoryName);
-
-            var processesByName = Process.GetProcessesByName("dotnet");
+            
+            var processesByName = Process.GetProcessesByName(processName);
 
             foreach (var process in processesByName)
             {
@@ -42,18 +44,18 @@ namespace Infinni.Deployer.CommandHandlers
 
                         try
                         {
+                            Log.Information("Found {ProcessName} process {ProcessID}", processName, process.Id);
+
                             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                             {
-                                var taskkill = Process.Start("taskkill", $"/pid {process.Id} /f");
-                                taskkill.WaitForExit();
+                                WindowsHelper.SendSigIntToApplication(process);
 
                                 return Task.CompletedTask;
                             }
 
                             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                             {
-                                var taskkill = Process.Start("kill", $"{process.Id}");
-                                taskkill.WaitForExit();
+                                LinuxHelper.SendSigIntToApplication(process);
 
                                 return Task.CompletedTask;
                             }
