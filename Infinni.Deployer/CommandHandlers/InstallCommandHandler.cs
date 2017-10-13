@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -74,19 +73,13 @@ namespace Infinni.Deployer.CommandHandlers
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var appStartFilePath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), AppsHelper.GetAppDirectoryName(packageId, version), "Habinet.Core.dll");
-                var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"dotnet.exe {appStartFilePath} --asService\"";
-
-                var processStartInfo = new ProcessStartInfo {FileName = "sc.exe", Arguments = arguments };
-                var process = Process.Start(processStartInfo);
-
-                Log.Information("Executing {File} {arguments}", processStartInfo.FileName, processStartInfo.Arguments);
-                process.WaitForExit();
+                var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), AppsHelper.GetAppDirectoryName(packageId, version), "Habinet.Core.dll");
+                ServiceControlWrapper.Create(packageId, version, binPath);
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-
+                throw new NotImplementedException();
             }
         }
     }

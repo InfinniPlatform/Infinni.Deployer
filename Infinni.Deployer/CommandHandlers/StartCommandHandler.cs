@@ -1,8 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 using Serilog;
 
@@ -23,17 +26,15 @@ namespace Infinni.Deployer.CommandHandlers
 
             if (Directory.Exists(appPath) && Directory.EnumerateFileSystemEntries(appPath).Any())
             {
-                var processStartInfo = new ProcessStartInfo
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    FileName = "dotnet.exe",
-                    Arguments = $"{appPath}{Path.DirectorySeparatorChar}{options.ExecutableFile}",
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
+                    ServiceControlWrapper.Start(options.PackageId, options.Version);
+                }
 
-                Process.Start(processStartInfo);
-
-                Log.Information("Process started.");
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {

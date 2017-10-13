@@ -47,17 +47,12 @@ namespace Infinni.Deployer.CommandHandlers
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var arguments = $"delete {packageId}.{version}";
-
-                var processStartInfo = new ProcessStartInfo { FileName = "sc.exe", Arguments = arguments };
-                var process = Process.Start(processStartInfo);
-
-                Log.Information("Executing {File} {arguments}", processStartInfo.FileName, processStartInfo.Arguments);
-                process.WaitForExit();
+                ServiceControlWrapper.Delete(packageId, version);
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                throw new NotImplementedException();
             }
         }
     }
