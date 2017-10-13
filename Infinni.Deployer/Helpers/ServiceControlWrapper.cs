@@ -5,11 +5,12 @@ namespace Infinni.Deployer.Helpers
 {
     public static class ServiceControlWrapper
     {
-        private const string FileName = "sc.exe";
+        private const string ScExecutable = "sc.exe";
+        private const string DotnetExecutable = "dotnet.exe";
 
         public static void Create(string packageId, string version, string binPath)
         {
-            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{binPath} --asService\"";
+            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {binPath} --asService\"";
 
             Execute(nameof(Create), arguments);
         }
@@ -37,9 +38,9 @@ namespace Infinni.Deployer.Helpers
 
         private static void Execute(string commandName, string arguments)
         {
-            Log.Information("Executing {File} {arguments}", FileName, arguments);
+            Log.Information("Executing {File} {arguments}", ScExecutable, arguments);
 
-            var process = Process.Start(FileName, arguments);
+            var process = Process.Start(ScExecutable, arguments);
             process.WaitForExit();
 
             Log.Information("{CommandName} command completed.", commandName);

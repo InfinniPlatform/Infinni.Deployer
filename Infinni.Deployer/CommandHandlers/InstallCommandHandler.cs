@@ -73,7 +73,10 @@ namespace Infinni.Deployer.CommandHandlers
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), AppsHelper.GetAppDirectoryName(packageId, version), "Habinet.Core.dll");
+                var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath),
+                                           AppsHelper.GetAppDirectoryName(packageId, version),
+                                           "Habinet.Core.dll");
+
                 ServiceControlWrapper.Create(packageId, version, binPath);
             }
 
