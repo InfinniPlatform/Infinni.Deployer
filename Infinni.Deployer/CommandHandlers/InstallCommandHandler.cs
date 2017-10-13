@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Infinni.Deployer.CommandOptions;
@@ -54,6 +56,8 @@ namespace Infinni.Deployer.CommandHandlers
             }
 
             Log.Information("Application {PackageId}.{Version} successfully installed.", options.PackageId, options.Version);
+
+            CreateService(options.PackageId, options.Version);
         }
 
         private void CheckExistingInstallation(string packageId, string version)
@@ -63,6 +67,26 @@ namespace Infinni.Deployer.CommandHandlers
             if (Directory.Exists(appDirectoryPath))
             {
                 Log.Error("Application {PackageId}.{Version} already installed.", packageId, version);
+            }
+        }
+
+        private void CreateService(string packageId, string version)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var appStartFilePath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), AppsHelper.GetAppDirectoryName(packageId, version), "Habinet.Core.dll");
+                var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"dotnet.exe {appStartFilePath} --asService\"";
+
+                var processStartInfo = new ProcessStartInfo {FileName = "sc.exe", Arguments = arguments };
+                var process = Process.Start(processStartInfo);
+
+                Log.Information("Executing {File} {arguments}", processStartInfo.FileName, processStartInfo.Arguments);
+                process.WaitForExit();
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+
             }
         }
     }
