@@ -39,8 +39,19 @@ namespace Infinni.Deployer.Helpers
         private static void Execute(string commandName, string arguments)
         {
             Log.Information("Executing {File} {arguments}", ScExecutable, arguments);
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = ScExecutable,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
 
-            var process = Process.Start(ScExecutable, arguments);
+            var process = Process.Start(processStartInfo);
+            process.EnableRaisingEvents = true;
+            process.OutputDataReceived += (sender, args) => Log.Information(args.Data);
+            process.ErrorDataReceived += (sender, args) => Log.Error(args.Data);
             process.WaitForExit();
 
             Log.Information("{CommandName} command completed.", commandName);
