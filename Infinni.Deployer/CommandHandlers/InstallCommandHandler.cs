@@ -71,18 +71,18 @@ namespace Infinni.Deployer.CommandHandlers
 
         private void CreateService(string packageId, string version)
         {
+            var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath),
+                                       AppsHelper.GetAppDirectoryName(packageId, version),
+                                       "Habinet.Core.dll");
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath),
-                                           AppsHelper.GetAppDirectoryName(packageId, version),
-                                           "Habinet.Core.dll");
-
                 ServiceControlWrapper.Create(packageId, version, binPath);
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                throw new NotImplementedException();
+                SystemCtlWrapper.Create(packageId, version, binPath);
             }
         }
     }

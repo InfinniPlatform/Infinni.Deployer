@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -33,14 +31,13 @@ namespace Infinni.Deployer.CommandHandlers
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    throw new NotImplementedException();
+                    SystemCtlWrapper.Start(options.PackageId, options.Version);
                 }
-            }
-            else
-            {
-                Log.Information("Directory {AppPath} is empty.", appPath);
+
+                return Task.CompletedTask;
             }
 
+            Log.Information("Directory {AppPath} is empty.", appPath);
 
             return Task.CompletedTask;
         }

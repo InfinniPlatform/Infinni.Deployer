@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Infinni.Deployer.ApplicationHelpers;
 using Infinni.Deployer.CommandOptions;
 using Infinni.Deployer.Helpers;
 using Serilog;
@@ -24,7 +21,7 @@ namespace Infinni.Deployer.CommandHandlers
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                throw new NotImplementedException();
+                SystemCtlWrapper.Stop(options.PackageId, options.Version);
             }
 
             return Task.CompletedTask;

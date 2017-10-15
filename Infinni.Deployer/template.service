@@ -1,0 +1,11 @@
+[Unit]
+Description={{description}}
+After=network.target
+
+[Service]
+ExecStart={{dotnetExecutable}} {{binPath}}
+Restart=on-failure
+SyslogIdentifier=Infinni
+
+[Install]
+WantedBy=multi-user.target
