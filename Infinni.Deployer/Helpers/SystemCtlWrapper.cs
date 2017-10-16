@@ -9,7 +9,7 @@ namespace Infinni.Deployer.Helpers
     {
         private const string SystemCtlExecutable = "systemctl";
         private const string DotnetExecutable = "/usr/bin/dotnet";
-        private const string ServicesPath = "/etc/systemd/system/";
+        private const string ServicesPath = "/lib/systemd/system/";
 
         public static void Create(string packageId, string version, string binPath)
         {
@@ -22,7 +22,8 @@ namespace Infinni.Deployer.Helpers
 
             var filledTemplate = template.Replace("{{description}}", "New ASP.NET Core service.")
                                          .Replace("{{dotnetExecutable}}", DotnetExecutable)
-                                         .Replace("{{binPath}}", binPath);
+                                         .Replace("{{binPath}}", binPath)
+                                         .Replace("{{workingDirectory}}", Path.GetDirectoryName(binPath));
 
             using (var fileStream = File.Create(Path.Combine(ServicesPath, $"{packageId}.{version}.service")))
             using (var streamWriter = new StreamWriter(fileStream))
@@ -31,6 +32,7 @@ namespace Infinni.Deployer.Helpers
             }
 
             Execute(nameof(Create), "daemon-reload");
+            Execute(nameof(Create), $"enable {packageId}.{version}.service");
         }
 
         public static void Delete(string packageId, string version)
