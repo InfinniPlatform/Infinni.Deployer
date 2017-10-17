@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 ExecStart={{dotnetExecutable}} {{binPath}}
+WorkingDirectory={{workingDirectory}}
 Restart=on-failure
 SyslogIdentifier=Infinni
 
