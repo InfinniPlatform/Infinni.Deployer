@@ -25,33 +25,39 @@ namespace Infinni.Deployer.Helpers
                                          .Replace("{{binPath}}", binPath)
                                          .Replace("{{workingDirectory}}", Path.GetDirectoryName(binPath));
 
-            var serviceFilename = $"{packageId}.{version}.service".ToLowerInvariant();
+            var serviceFileName = GetServiceFileName(packageId, version);
 
-            using (var fileStream = File.Create(Path.Combine(ServicesPath, serviceFilename)))
+            using (var fileStream = File.Create(Path.Combine(ServicesPath, serviceFileName)))
             using (var streamWriter = new StreamWriter(fileStream))
             {
                 streamWriter.Write(filledTemplate);
             }
 
             Execute(nameof(Create), "daemon-reload");
-            Execute(nameof(Create), $"enable {serviceFilename}");
+            Execute(nameof(Create), $"enable {serviceFileName}");
         }
 
         public static void Delete(string packageId, string version)
         {
-            Execute(nameof(Delete), $"disable {packageId}.{version}");
+            var serviceName = GetServiceName(packageId, version);
+
+            Execute(nameof(Delete), $"disable {serviceName}");
             Execute(nameof(Delete), "");
         }
 
         public static void Start(string packageId, string version)
         {
-            Execute(nameof(Start), $"start {packageId}.{version}");
-            File.Delete(Path.Combine(ServicesPath, $"{packageId}.{version}.service"));
+            var serviceName = GetServiceName(packageId, version);
+            var serviceFileName = GetServiceFileName(packageId, version);
+
+            Execute(nameof(Start), $"start {serviceName}");
+            File.Delete(Path.Combine(ServicesPath, serviceFileName));
         }
 
         public static void Stop(string packageId, string version)
         {
-            Execute(nameof(Stop), $"stop {packageId}.{version}");
+            var serviceName = GetServiceName(packageId, version);
+            Execute(nameof(Stop), $"stop {serviceName}");
         }
 
         private static void Execute(string commandName, string arguments)
@@ -73,6 +79,16 @@ namespace Infinni.Deployer.Helpers
             process.WaitForExit();
 
             Log.Information("{CommandName} command completed.", commandName);
+        }
+
+        private static string GetServiceName(string packageId, string version)
+        {
+            return $"{packageId}.{version}".ToLowerInvariant();
+        }
+
+        private static string GetServiceFileName(string packageId, string version)
+        {
+            return $"{GetServiceName(packageId, version)}.service";
         }
     }
 }
