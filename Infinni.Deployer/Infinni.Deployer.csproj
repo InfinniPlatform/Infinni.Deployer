@@ -3,7 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Deployer</AssemblyName>
+    <AssemblyName>deployer</AssemblyName>
+    <Authors>Infinnity Solutions</Authors>
+    <PackageId>Infinni.Deployer</PackageId>
+    <Version>1.0.0</Version>
+    <Company>Infinnity Solutions</Company>
+    <Product>Infinni.Deployer</Product>
+    <Copyright>Copyright © Infinnity Solutions 2017</Copyright>
+    <PackageProjectUrl>https://github.com/InfinniPlatform/Infinni.Deployer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/InfinniPlatform/Infinni.Deployer</RepositoryUrl>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
