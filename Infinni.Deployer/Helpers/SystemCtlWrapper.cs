@@ -37,27 +37,25 @@ namespace Infinni.Deployer.Helpers
             Execute(nameof(Create), $"enable {serviceFileName}");
         }
 
-        public static void Delete(string packageId, string version)
-        {
-            var serviceName = GetServiceName(packageId, version);
-
-            Execute(nameof(Delete), $"disable {serviceName}");
-            Execute(nameof(Delete), "");
-        }
-
         public static void Start(string packageId, string version)
         {
             var serviceName = GetServiceName(packageId, version);
-            var serviceFileName = GetServiceFileName(packageId, version);
-
             Execute(nameof(Start), $"start {serviceName}");
-            File.Delete(Path.Combine(ServicesPath, serviceFileName));
         }
 
         public static void Stop(string packageId, string version)
         {
             var serviceName = GetServiceName(packageId, version);
             Execute(nameof(Stop), $"stop {serviceName}");
+        }
+
+        public static void Delete(string packageId, string version)
+        {
+            var serviceName = GetServiceName(packageId, version);
+            var serviceFileName = GetServiceFileName(packageId, version);
+
+            Execute(nameof(Delete), $"disable {serviceName}");
+            File.Delete(Path.Combine(ServicesPath, serviceFileName));
         }
 
         private static void Execute(string commandName, string arguments)
