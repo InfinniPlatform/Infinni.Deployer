@@ -25,14 +25,16 @@ namespace Infinni.Deployer.Helpers
                                          .Replace("{{binPath}}", binPath)
                                          .Replace("{{workingDirectory}}", Path.GetDirectoryName(binPath));
 
-            using (var fileStream = File.Create(Path.Combine(ServicesPath, $"{packageId}.{version}.service")))
+            var serviceFilename = $"{packageId}.{version}.service".ToLowerInvariant();
+
+            using (var fileStream = File.Create(Path.Combine(ServicesPath, serviceFilename)))
             using (var streamWriter = new StreamWriter(fileStream))
             {
                 streamWriter.Write(filledTemplate);
             }
 
             Execute(nameof(Create), "daemon-reload");
-            Execute(nameof(Create), $"enable {packageId}.{version}.service");
+            Execute(nameof(Create), $"enable {serviceFilename}");
         }
 
         public static void Delete(string packageId, string version)
