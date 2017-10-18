@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Infinni.Deployer.CommandOptions
+namespace Infinni.Deployer.CommandLine.Options
 {
     [Verb("list", HelpText = "List available versions of application package.")]
     public class ListOptions : ICommandOptions

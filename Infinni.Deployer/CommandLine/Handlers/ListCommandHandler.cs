@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Settings;
 using NuGet.Protocol.Core.Types;
 using Serilog;
 using ILogger = NuGet.Common.ILogger;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class ListCommandHandler : ICommandHandler<ListOptions>
     {

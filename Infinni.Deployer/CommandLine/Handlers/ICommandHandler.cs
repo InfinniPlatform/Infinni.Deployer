@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Options;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public interface ICommandHandler
     {

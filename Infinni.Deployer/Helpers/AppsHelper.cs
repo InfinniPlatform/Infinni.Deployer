@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Infinni.Deployer.CommandHandlers;
+using Infinni.Deployer.CommandLine.Handlers;
 
 namespace Infinni.Deployer.Helpers
 {

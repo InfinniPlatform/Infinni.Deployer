@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using CommandLine;
-using Infinni.Deployer.CommandHandlers;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Handlers;
+using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.IoC;
 using Serilog;
 
@@ -27,6 +27,8 @@ namespace Infinni.Deployer
                     }
                 })
                 .Wait();
+
+            Log.CloseAndFlush();
         }
 
         private static Task ParseCommandLine(IEnumerable<string> args)

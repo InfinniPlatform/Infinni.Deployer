@@ -2,9 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Autofac;
-using Infinni.Deployer.CommandHandlers;
-using Infinni.Deployer.CommandOptions;
+using Autofac.Builder;
+using Infinni.Deployer.CommandLine.Handlers;
+using Infinni.Deployer.CommandLine.Options;
+using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Logging;
 using Infinni.Deployer.Settings;
 using Newtonsoft.Json;
@@ -35,7 +38,26 @@ namespace Infinni.Deployer.IoC
                    .AsSelf()
                    .SingleInstance();
 
+            builder.Register(SystemServiceManagerFactory)
+                   .As<ISystemServiceManager>()
+                   .SingleInstance();
+
             Resolver = builder.Build();
+        }
+
+        private static ISystemServiceManager SystemServiceManagerFactory(IComponentContext context)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new ServiceControlWrapper();
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new SystemCtlWrapper();
+            }
+            
+            throw new NotImplementedException($"Infinni.Deployer is not implemented for {RuntimeInformation.OSDescription}.");
         }
 
         private static void RegisterSettings(this ContainerBuilder builder)

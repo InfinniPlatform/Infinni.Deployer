@@ -5,13 +5,16 @@ using Serilog;
 
 namespace Infinni.Deployer.Helpers
 {
-    public static class SystemCtlWrapper
+    /// <summary>
+    /// Manager for Linux daemons.
+    /// </summary>
+    public class SystemCtlWrapper : ISystemServiceManager
     {
         private const string SystemCtlExecutable = "systemctl";
         private const string DotnetExecutable = "/usr/bin/dotnet";
         private const string ServicesPath = "/lib/systemd/system/";
 
-        public static void Create(string packageId, string version, string binPath)
+        public void Create(string packageId, string version, string binPath)
         {
             string template;
 
@@ -37,19 +40,19 @@ namespace Infinni.Deployer.Helpers
             Execute(nameof(Create), $"enable {serviceFileName}");
         }
 
-        public static void Start(string packageId, string version)
+        public void Start(string packageId, string version)
         {
             var serviceName = GetServiceName(packageId, version);
             Execute(nameof(Start), $"start {serviceName}");
         }
 
-        public static void Stop(string packageId, string version)
+        public void Stop(string packageId, string version)
         {
             var serviceName = GetServiceName(packageId, version);
             Execute(nameof(Stop), $"stop {serviceName}");
         }
 
-        public static void Delete(string packageId, string version)
+        public void Delete(string packageId, string version)
         {
             var serviceName = GetServiceName(packageId, version);
             var serviceFileName = GetServiceFileName(packageId, version);

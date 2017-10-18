@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace Infinni.Deployer.CommandOptions
+namespace Infinni.Deployer.CommandLine.Options
 {
     [Verb("install", HelpText = "Install application.")]
     public class InstallOptions : ICommandOptions

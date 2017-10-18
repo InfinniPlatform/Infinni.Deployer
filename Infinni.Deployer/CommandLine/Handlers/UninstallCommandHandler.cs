@@ -1,21 +1,23 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 using Serilog;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class UninstallCommandHandler : ICommandHandler<UninstallOptions>
     {
         private readonly AppSettings _appSettings;
+        private readonly ISystemServiceManager _systemServiceManager;
 
-        public UninstallCommandHandler(AppSettings appSettings)
+        public UninstallCommandHandler(AppSettings appSettings,
+                                       ISystemServiceManager systemServiceManager)
         {
             _appSettings = appSettings;
+            _systemServiceManager = systemServiceManager;
         }
 
         public Task Handle(UninstallOptions options)
@@ -32,7 +34,7 @@ namespace Infinni.Deployer.CommandHandlers
 
                 Directory.Delete(appDirectoryPath, true);
 
-                UninstallService(options.PackageId, options.Version);
+                _systemServiceManager.Delete(options.PackageId, options.Version);
             }
             catch (Exception e)
             {
@@ -42,17 +44,6 @@ namespace Infinni.Deployer.CommandHandlers
             return Task.CompletedTask;
         }
 
-        private static void UninstallService(string packageId, string version)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                ServiceControlWrapper.Delete(packageId, version);
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                SystemCtlWrapper.Delete(packageId, version);
-            }
-        }
+        
     }
 }

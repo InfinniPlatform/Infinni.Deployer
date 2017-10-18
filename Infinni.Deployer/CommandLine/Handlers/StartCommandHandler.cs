@@ -1,21 +1,23 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 using Serilog;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class StartCommandHandler : ICommandHandler<StartOptions>
     {
         private readonly AppSettings _appSettings;
+        private readonly ISystemServiceManager _systemServiceManager;
 
-        public StartCommandHandler(AppSettings appSettings)
+        public StartCommandHandler(AppSettings appSettings,
+                                   ISystemServiceManager systemServiceManager)
         {
             _appSettings = appSettings;
+            _systemServiceManager = systemServiceManager;
         }
 
         public Task Handle(StartOptions options)
@@ -24,15 +26,7 @@ namespace Infinni.Deployer.CommandHandlers
 
             if (Directory.Exists(appPath) && Directory.EnumerateFileSystemEntries(appPath).Any())
             {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    ServiceControlWrapper.Start(options.PackageId, options.Version);
-                }
-
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    SystemCtlWrapper.Start(options.PackageId, options.Version);
-                }
+                _systemServiceManager.Start(options.PackageId, options.Version);
 
                 return Task.CompletedTask;
             }

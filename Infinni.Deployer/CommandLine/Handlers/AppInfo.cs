@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class AppInfo
     {

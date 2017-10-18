@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Infinni.Deployer.CommandOptions;
+using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Infinni.Deployer.CommandHandlers
+namespace Infinni.Deployer.CommandLine.Handlers
 {
     public partial class AppsCommandHandler : ICommandHandler<AppsOptions>
     {
