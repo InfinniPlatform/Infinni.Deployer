@@ -52,7 +52,7 @@ namespace Infinni.Deployer.IoC
                 return new ServiceControlWrapper();
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 return new SystemCtlWrapper();
             }
