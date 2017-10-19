@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Autofac;
-using Autofac.Builder;
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Logging;
+using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
 using Newtonsoft.Json;
 using Serilog;
@@ -26,7 +26,6 @@ namespace Infinni.Deployer.IoC
 
             var builder = new ContainerBuilder();
 
-            builder.RegisterSettings();
             builder.RegisterCommandHandlers(assembly);
             builder.RegisterCommandOptions(assembly);
 
@@ -38,11 +37,31 @@ namespace Infinni.Deployer.IoC
                    .AsSelf()
                    .SingleInstance();
 
+            builder.RegisterType<NugetPackageInstaller>()
+                   .AsSelf()
+                   .SingleInstance();
+
+            builder.RegisterType<NugetPackageSearcher>()
+                   .AsSelf()
+                   .SingleInstance();
+
             builder.Register(SystemServiceManagerFactory)
                    .As<ISystemServiceManager>()
                    .SingleInstance();
 
+            builder.Register(SettingsFactory)
+                   .As<AppSettings>()
+                   .SingleInstance();
+
             Resolver = builder.Build();
+        }
+
+        public static void InitializeLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
+                .CreateLogger();
         }
 
         private static ISystemServiceManager SystemServiceManagerFactory(IComponentContext context)
@@ -56,19 +75,15 @@ namespace Infinni.Deployer.IoC
             {
                 return new SystemCtlWrapper();
             }
-            
+
             throw new NotImplementedException($"Infinni.Deployer is not implemented for {RuntimeInformation.OSDescription}.");
         }
 
-        private static void RegisterSettings(this ContainerBuilder builder)
+        private static AppSettings SettingsFactory(IComponentContext context)
         {
-            builder.Register(r =>
-                   {
-                       var appSettingsFile = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, AppSettings.FileName));
-                       var settings = JsonConvert.DeserializeObject<AppSettings>(appSettingsFile);
-                       return settings;
-                   })
-                   .SingleInstance();
+            var appSettingsFile = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, AppSettings.FileName));
+            var settings = JsonConvert.DeserializeObject<AppSettings>(appSettingsFile);
+            return settings;
         }
 
         private static void RegisterCommandHandlers(this ContainerBuilder builder, Assembly assembly)
@@ -88,14 +103,6 @@ namespace Infinni.Deployer.IoC
                        .As<ICommandOptions>()
                        .SingleInstance();
             }
-        }
-
-        public static void InitializeLogger()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
-                .CreateLogger();
         }
     }
 }

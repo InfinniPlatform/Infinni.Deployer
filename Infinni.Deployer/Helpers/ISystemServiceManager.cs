@@ -10,8 +10,8 @@
         /// </summary>
         /// <param name="packageId">App package id.</param>
         /// <param name="version">App package version.</param>
-        /// <param name="binPath">Path to application executable file.</param>
-        void Create(string packageId, string version, string binPath);
+        /// <param name="executablePath">Path to application executable file.</param>
+        void Create(string packageId, string version, string executablePath);
 
         /// <summary>
         /// Delete service/daemon for application.

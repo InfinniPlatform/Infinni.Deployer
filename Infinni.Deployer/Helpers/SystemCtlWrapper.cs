@@ -14,7 +14,7 @@ namespace Infinni.Deployer.Helpers
         private const string DotnetExecutable = "/usr/bin/dotnet";
         private const string ServicesPath = "/lib/systemd/system/";
 
-        public void Create(string packageId, string version, string binPath)
+        public void Create(string packageId, string version, string executablePath)
         {
             string template;
 
@@ -24,9 +24,9 @@ namespace Infinni.Deployer.Helpers
             }
 
             var filledTemplate = template.Replace("{{description}}", "New ASP.NET Core service.")
-                                         .Replace("{{dotnetExecutable}}", DotnetExecutable)
-                                         .Replace("{{binPath}}", binPath)
-                                         .Replace("{{workingDirectory}}", Path.GetDirectoryName(binPath));
+                                         .Replace("{{dotnetExecutablePath}}", DotnetExecutable)
+                                         .Replace("{{appExecutablePath}}", executablePath)
+                                         .Replace("{{workingDirectory}}", Path.GetDirectoryName(executablePath));
 
             var serviceFileName = GetServiceFileName(packageId, version);
 

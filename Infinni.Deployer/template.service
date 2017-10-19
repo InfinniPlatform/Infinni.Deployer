@@ -3,7 +3,7 @@ Description={{description}}
 After=network.target
 
 [Service]
-ExecStart={{dotnetExecutable}} {{binPath}}
+ExecStart={{dotnetExecutablePath}} {{appExecutablePath}}
 WorkingDirectory={{workingDirectory}}
 Restart=on-failure
 SyslogIdentifier=Infinni

@@ -23,7 +23,7 @@ namespace Infinni.Deployer
                 {
                     if (task.IsFaulted)
                     {
-                        Log.Error(task.Exception, string.Empty);
+                        Log.Error(task.Exception, "{Exception}");
                     }
                 })
                 .Wait();
@@ -45,34 +45,20 @@ namespace Infinni.Deployer
                 return Task.FromResult(-1);
             }
 
-            if (parsed.Value is InstallOptions installOptions)
+            switch (parsed.Value)
             {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<InstallOptions>>().Handle(installOptions);
-            }
-
-            if (parsed.Value is ListOptions listOptions)
-            {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<ListOptions>>().Handle(listOptions);
-            }
-
-            if (parsed.Value is AppsOptions appsOptions)
-            {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<AppsOptions>>().Handle(appsOptions);
-            }
-
-            if (parsed.Value is UninstallOptions uninstallOptions)
-            {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<UninstallOptions>>().Handle(uninstallOptions);
-            }
-
-            if (parsed.Value is StartOptions startOptions)
-            {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<StartOptions>>().Handle(startOptions);
-            }
-
-            if (parsed.Value is StopOptions stopOptions)
-            {
-                return AppBuilder.Resolver.Resolve<ICommandHandler<StopOptions>>().Handle(stopOptions);
+                case InstallOptions installOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<InstallOptions>>().Handle(installOptions);
+                case ListOptions listOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<ListOptions>>().Handle(listOptions);
+                case AppsOptions appsOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<AppsOptions>>().Handle(appsOptions);
+                case UninstallOptions uninstallOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<UninstallOptions>>().Handle(uninstallOptions);
+                case StartOptions startOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<StartOptions>>().Handle(startOptions);
+                case StopOptions stopOptions:
+                    return AppBuilder.Resolver.Resolve<ICommandHandler<StopOptions>>().Handle(stopOptions);
             }
 
             throw new InvalidOperationException();
