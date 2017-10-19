@@ -60,7 +60,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
             Log.Information("Application {PackageId}.{Version} successfully installed.", options.PackageId, options.Version);
 
             var binPath = Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath),
-                                       AppsHelper.GetAppDirectoryName(options.PackageId, options.Version),
+                                       Apps.GetAppFullName(options.PackageId, options.Version),
                                        "Habinet.Core.dll");
 
             _systemServiceManager.Create(options.PackageId, options.Version, binPath);
@@ -68,7 +68,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         private void CheckExistingInstallation(string packageId, string version)
         {
-            var appDirectoryPath = Path.Combine(_appSettings.InstallDirectoryPath, AppsHelper.GetAppDirectoryName(packageId, version));
+            var appDirectoryPath = Path.Combine(_appSettings.InstallDirectoryPath, Apps.GetAppFullName(packageId, version));
 
             if (Directory.Exists(appDirectoryPath))
             {

@@ -9,7 +9,7 @@ using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
-    public partial class AppsCommandHandler : ICommandHandler<AppsOptions>
+    public class AppsCommandHandler : ICommandHandler<AppsOptions>
     {
         private readonly AppSettings _appSettings;
 
@@ -36,7 +36,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             foreach (var directory in directories.Where(d => Directory.EnumerateFileSystemEntries(d).Any()))
             {
-                Log.Information("{AppsInfo}", JsonConvert.SerializeObject(AppsHelper.GetAppInfoFromPath(directory), Formatting.Indented));
+                Log.Information("{AppsInfo}", JsonConvert.SerializeObject(Apps.GetInfoByPath(directory), Formatting.Indented));
             }
 
             return Task.CompletedTask;

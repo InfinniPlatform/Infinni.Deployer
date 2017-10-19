@@ -3,16 +3,16 @@ using Infinni.Deployer.CommandLine.Handlers;
 
 namespace Infinni.Deployer.Helpers
 {
-    public static class AppsHelper
+    public static class Apps
     {
         private static readonly Regex AppDirectoryRegex = new Regex("(?<packageId>\\w+)\\.(?<version>\\d\\.\\d+\\.\\d+\\.\\d+)", RegexOptions.Compiled);
 
-        public static string GetAppDirectoryName(string packageId, string version)
+        public static string GetAppFullName(string packageId, string version)
         {
             return $"{packageId}.{version}";
         }
 
-        public static AppInfo GetAppInfoFromPath(string path)
+        public static AppInfo GetInfoByPath(string path)
         {
             var match = AppDirectoryRegex.Match(path);
 

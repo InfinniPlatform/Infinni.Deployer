@@ -10,10 +10,11 @@ namespace Infinni.Deployer.Helpers
     {
         private const string ScExecutable = "sc.exe";
         private const string DotnetExecutable = "dotnet.exe";
+        private const string WindowsServiceKey = "--windowsService";
 
         public void Create(string packageId, string version, string binPath)
         {
-            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {binPath} --asService\"";
+            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {binPath} {WindowsServiceKey}\"";
 
             Execute(nameof(Create), arguments);
         }
@@ -42,6 +43,7 @@ namespace Infinni.Deployer.Helpers
         private void Execute(string commandName, string arguments)
         {
             Log.Information("Executing {File} {arguments}", ScExecutable, arguments);
+
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = ScExecutable,

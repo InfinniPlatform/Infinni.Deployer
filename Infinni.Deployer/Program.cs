@@ -40,9 +40,7 @@ namespace Infinni.Deployer
             var result = Parser.Default.ParseArguments(args, optionTypes);
 
 
-            var parsed = result as Parsed<object>;
-
-            if (parsed == null)
+            if (!(result is Parsed<object> parsed))
             {
                 return Task.FromResult(-1);
             }

@@ -22,7 +22,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public Task Handle(UninstallOptions options)
         {
-            var appDirectoryName = AppsHelper.GetAppDirectoryName(options.PackageId, options.Version);
+            var appDirectoryName = Apps.GetAppFullName(options.PackageId, options.Version);
 
             var installDirectoryPath = Path.GetFullPath(_appSettings.InstallDirectoryPath);
 

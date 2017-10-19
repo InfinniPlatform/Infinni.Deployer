@@ -16,7 +16,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public Task Handle(StopOptions options)
         {
-            var appDirectoryName = AppsHelper.GetAppDirectoryName(options.PackageId, options.Version);
+            var appDirectoryName = Apps.GetAppFullName(options.PackageId, options.Version);
 
             Log.Information("Stopping application {AppDirectoryName}", appDirectoryName);
 
