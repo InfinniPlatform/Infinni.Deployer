@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using Serilog;
 
 namespace Infinni.Deployer.Helpers
 {
@@ -36,20 +34,8 @@ namespace Infinni.Deployer.Helpers
                 streamWriter.Write(filledTemplate);
             }
 
-            Execute(nameof(Create), "daemon-reload");
-            Execute(nameof(Create), $"enable {serviceFileName}");
-        }
-
-        public void Start(string packageId, string version)
-        {
-            var serviceName = GetServiceName(packageId, version);
-            Execute(nameof(Start), $"start {serviceName}");
-        }
-
-        public void Stop(string packageId, string version)
-        {
-            var serviceName = GetServiceName(packageId, version);
-            Execute(nameof(Stop), $"stop {serviceName}");
+            ProcessExecutor.Execute(SystemCtlExecutable, nameof(Create), "daemon-reload");
+            ProcessExecutor.Execute(SystemCtlExecutable, nameof(Create), $"enable {serviceFileName}");
         }
 
         public void Delete(string packageId, string version)
@@ -57,29 +43,20 @@ namespace Infinni.Deployer.Helpers
             var serviceName = GetServiceName(packageId, version);
             var serviceFileName = GetServiceFileName(packageId, version);
 
-            Execute(nameof(Delete), $"disable {serviceName}");
+            ProcessExecutor.Execute(SystemCtlExecutable, nameof(Delete), $"disable {serviceName}");
             File.Delete(Path.Combine(ServicesPath, serviceFileName));
         }
 
-        private static void Execute(string commandName, string arguments)
+        public void Start(string packageId, string version)
         {
-            Log.Information("Executing {File} {arguments}", SystemCtlExecutable, arguments);
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = SystemCtlExecutable,
-                Arguments = arguments,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
+            var serviceName = GetServiceName(packageId, version);
+            ProcessExecutor.Execute(SystemCtlExecutable, nameof(Start), $"start {serviceName}");
+        }
 
-            var process = Process.Start(processStartInfo);
-            process.EnableRaisingEvents = true;
-            process.OutputDataReceived += (sender, args) => Log.Information(args.Data);
-            process.ErrorDataReceived += (sender, args) => Log.Error(args.Data);
-            process.WaitForExit();
-
-            Log.Information("{CommandName} command completed.", commandName);
+        public void Stop(string packageId, string version)
+        {
+            var serviceName = GetServiceName(packageId, version);
+            ProcessExecutor.Execute(SystemCtlExecutable, nameof(Stop), $"stop {serviceName}");
         }
 
         private static string GetServiceName(string packageId, string version)
