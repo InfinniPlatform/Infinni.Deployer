@@ -13,12 +13,12 @@ namespace Infinni.Deployer.Helpers
     {
         private const string ScExecutable = "sc.exe";
         private const string DotnetExecutable = "dotnet.exe";
-        private const string WindowsServiceKey = "--windowsService";
+        private const string WindowsServiceOption = "--windows-service";
         private const int DefaultTimeout = 60 * 1000;
 
         public void Create(string packageId, string version, string executablePath)
         {
-            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceKey}\"";
+            var arguments = $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption}\"";
 
             Execute(nameof(Create), arguments);
         }
