@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace Infinni.Deployer.Helpers
@@ -14,6 +15,11 @@ namespace Infinni.Deployer.Helpers
 
         public void Create(string packageId, string version, string executablePath)
         {
+            if (executablePath.EndsWith("exe"))
+            {
+                throw new ArgumentException($"Aplication {packageId} is incompatible with Linux.");
+            }
+
             string template;
 
             using (var streamReader = new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("Infinni.Deployer.template.service")))

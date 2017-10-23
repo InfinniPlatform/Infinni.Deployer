@@ -45,6 +45,10 @@ namespace Infinni.Deployer.IoC
                    .AsSelf()
                    .SingleInstance();
 
+            builder.RegisterType<AppsManager>()
+                   .AsSelf()
+                   .SingleInstance();
+
             builder.Register(SystemServiceManagerFactory)
                    .As<ISystemServiceManager>()
                    .SingleInstance();
@@ -59,6 +63,7 @@ namespace Infinni.Deployer.IoC
         public static void InitializeLogger()
         {
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
                 .CreateLogger();

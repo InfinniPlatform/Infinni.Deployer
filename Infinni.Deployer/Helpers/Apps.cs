@@ -11,7 +11,8 @@ namespace Infinni.Deployer.Helpers
 
         private static readonly Dictionary<string, string> Executables = new Dictionary<string, string>
         {
-            {"Habinet", "Habinet.Core.dll"}
+            {"Habinet", "Habinet.Core.dll"},
+            {"Habinet.Notifications", "Habinet.Notifications.exe"}
         };
 
         public static string GetExecutablePath(string installDirectoryPath, string packageId, string version)

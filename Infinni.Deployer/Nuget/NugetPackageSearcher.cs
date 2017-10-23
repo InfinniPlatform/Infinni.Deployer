@@ -19,7 +19,7 @@ namespace Infinni.Deployer.Nuget
             _logger = logger;
         }
 
-        public async Task Search(string packageId, int count)
+        public async Task Search(string packageId, int count, bool includePrerelease)
         {
             Log.Information("Searching last {Count} versions of {PackageId} app in {Source}", count, packageId, _nugetSettings.PackageSource.Value.SourceUri);
 
@@ -27,7 +27,7 @@ namespace Infinni.Deployer.Nuget
 
             var packageMetadataResource = await sourceRepository.GetResourceAsync<PackageMetadataResource>();
 
-            var searchMetadata = (await packageMetadataResource.GetMetadataAsync(packageId, false, false, _logger, CancellationToken.None))
+            var searchMetadata = (await packageMetadataResource.GetMetadataAsync(packageId, includePrerelease, false, _logger, CancellationToken.None))
                 .ToArray();
 
             Log.Information("Found {TotalCount}:", searchMetadata.Length);

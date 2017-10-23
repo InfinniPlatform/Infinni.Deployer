@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Nuget;
+using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
@@ -16,7 +17,14 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public async Task Handle(ListOptions options)
         {
-            await _nugetPackageSearcher.Search(options.PackageId, options.Count);
+            if (string.IsNullOrEmpty(options.PackageId))
+            {
+                Log.Error("Application packageId could not be empty");
+            }
+            else
+            {
+                await _nugetPackageSearcher.Search(options.PackageId, options.Count, options.IncludePrerelease);
+            }
         }
     }
 }
