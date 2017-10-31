@@ -8,12 +8,13 @@
         private const string ScExecutable = "sc.exe";
         private const string DotnetExecutable = "dotnet.exe";
         private const string WindowsServiceOption = "--windows-service";
+        private const string SetWorkingDirectoryOption = "--set-working-directory";
 
         public void Create(string packageId, string version, string executablePath)
         {
             var arguments = executablePath.EndsWith("exe")
-                ? $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{executablePath}\""
-                : $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption}\"";
+                ? $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{executablePath} {SetWorkingDirectoryOption}\""
+                : $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\"";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Create), arguments);
         }
