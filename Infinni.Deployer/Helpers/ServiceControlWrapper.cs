@@ -12,8 +12,8 @@
 
         public void Create(string packageId, string version, string executablePath)
         {
-            var arguments = executablePath.EndsWith("exe")
-                ? $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{executablePath} {SetWorkingDirectoryOption}\""
+            var arguments = executablePath.EndsWith(".exe")
+                ? $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\""
                 : $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\"";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Create), arguments);
