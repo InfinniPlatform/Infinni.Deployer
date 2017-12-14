@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Autofac;
+
 using CommandLine;
+
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.IoC;
+
 using Serilog;
 
 namespace Infinni.Deployer
@@ -20,12 +24,12 @@ namespace Infinni.Deployer
 
             ParseCommandLine(args)
                 .ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        Log.Error(task.Exception, "{Exception}");
-                    }
-                })
+                              {
+                                  if (task.IsFaulted)
+                                  {
+                                      Log.Error(task.Exception, "{Exception}");
+                                  }
+                              })
                 .Wait();
 
             Log.CloseAndFlush();

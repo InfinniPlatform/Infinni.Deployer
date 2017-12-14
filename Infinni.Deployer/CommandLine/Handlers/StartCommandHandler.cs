@@ -1,24 +1,26 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
+
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class StartCommandHandler : ICommandHandler<StartOptions>
     {
-        private readonly AppSettings _appSettings;
-        private readonly ISystemServiceManager _systemServiceManager;
-
         public StartCommandHandler(AppSettings appSettings,
                                    ISystemServiceManager systemServiceManager)
         {
             _appSettings = appSettings;
             _systemServiceManager = systemServiceManager;
         }
+
+        private readonly AppSettings _appSettings;
+        private readonly ISystemServiceManager _systemServiceManager;
 
         public Task Handle(StartOptions options)
         {

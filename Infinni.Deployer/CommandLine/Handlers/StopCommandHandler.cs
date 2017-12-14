@@ -1,18 +1,20 @@
 ﻿using System.Threading.Tasks;
+
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
+
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class StopCommandHandler : ICommandHandler<StopOptions>
     {
-        private readonly ISystemServiceManager _systemServiceManager;
-
         public StopCommandHandler(ISystemServiceManager systemServiceManager)
         {
             _systemServiceManager = systemServiceManager;
         }
+
+        private readonly ISystemServiceManager _systemServiceManager;
 
         public Task Handle(StopOptions options)
         {

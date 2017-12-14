@@ -3,15 +3,20 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 using Autofac;
+
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Logging;
 using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
+
 using Newtonsoft.Json;
+
 using Serilog;
+
 using ILogger = NuGet.Common.ILogger;
 
 namespace Infinni.Deployer.IoC
@@ -63,10 +68,10 @@ namespace Infinni.Deployer.IoC
         public static void InitializeLogger()
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
-                .CreateLogger();
+                         .MinimumLevel.Debug()
+                         .WriteTo.Console()
+                         .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
+                         .CreateLogger();
         }
 
         private static ISystemServiceManager SystemServiceManagerFactory(IComponentContext context)

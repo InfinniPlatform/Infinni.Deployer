@@ -1,24 +1,26 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
+
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class UninstallCommandHandler : ICommandHandler<UninstallOptions>
     {
-        private readonly AppSettings _appSettings;
-        private readonly ISystemServiceManager _systemServiceManager;
-
         public UninstallCommandHandler(AppSettings appSettings,
                                        ISystemServiceManager systemServiceManager)
         {
             _appSettings = appSettings;
             _systemServiceManager = systemServiceManager;
         }
+
+        private readonly AppSettings _appSettings;
+        private readonly ISystemServiceManager _systemServiceManager;
 
         public Task Handle(UninstallOptions options)
         {
@@ -43,7 +45,5 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             return Task.CompletedTask;
         }
-
-        
     }
 }

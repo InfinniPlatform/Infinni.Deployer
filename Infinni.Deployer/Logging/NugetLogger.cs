@@ -1,4 +1,5 @@
 ﻿using Serilog;
+
 using ILogger = NuGet.Common.ILogger;
 
 namespace Infinni.Deployer.Logging

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
+
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class InstallCommandHandler : ICommandHandler<InstallOptions>
     {
-        private readonly AppSettings _appSettings;
-        private readonly NugetPackageInstaller _nugetPackageInstaller;
-        private readonly ISystemServiceManager _systemServiceManager;
-
         public InstallCommandHandler(AppSettings appSettings,
                                      NugetPackageInstaller nugetPackageInstaller,
                                      ISystemServiceManager systemServiceManager)
@@ -23,6 +21,10 @@ namespace Infinni.Deployer.CommandLine.Handlers
             _nugetPackageInstaller = nugetPackageInstaller;
             _systemServiceManager = systemServiceManager;
         }
+
+        private readonly AppSettings _appSettings;
+        private readonly NugetPackageInstaller _nugetPackageInstaller;
+        private readonly ISystemServiceManager _systemServiceManager;
 
         public async Task Handle(InstallOptions options)
         {

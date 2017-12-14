@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+
 using Serilog;
 
 namespace Infinni.Deployer.Helpers
@@ -36,30 +37,30 @@ namespace Infinni.Deployer.Helpers
                     var copyOutputCloseEvent = outputCloseEvent;
 
                     process.OutputDataReceived += (s, e) =>
-                    {
-                        if (string.IsNullOrEmpty(e.Data))
-                        {
-                            copyOutputCloseEvent.Set();
-                        }
-                        else
-                        {
-                            outputBuilder.AppendLine(e.Data);
-                        }
-                    };
+                                                  {
+                                                      if (string.IsNullOrEmpty(e.Data))
+                                                      {
+                                                          copyOutputCloseEvent.Set();
+                                                      }
+                                                      else
+                                                      {
+                                                          outputBuilder.AppendLine(e.Data);
+                                                      }
+                                                  };
 
                     var copyErrorCloseEvent = errorCloseEvent;
 
                     process.ErrorDataReceived += (s, e) =>
-                    {
-                        if (string.IsNullOrEmpty(e.Data))
-                        {
-                            copyErrorCloseEvent.Set();
-                        }
-                        else
-                        {
-                            errorBuilder.AppendLine(e.Data);
-                        }
-                    };
+                                                 {
+                                                     if (string.IsNullOrEmpty(e.Data))
+                                                     {
+                                                         copyErrorCloseEvent.Set();
+                                                     }
+                                                     else
+                                                     {
+                                                         errorBuilder.AppendLine(e.Data);
+                                                     }
+                                                 };
 
                     bool isStarted;
 

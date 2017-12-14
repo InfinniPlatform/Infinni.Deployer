@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+
 using Infinni.Deployer.CommandLine.Handlers;
 
 namespace Infinni.Deployer.Helpers
@@ -10,10 +11,10 @@ namespace Infinni.Deployer.Helpers
         private static readonly Regex AppDirectoryRegex = new Regex("(?<packageId>\\w+)\\.(?<version>\\d\\.\\d+\\.\\d+\\.\\d+)", RegexOptions.Compiled);
 
         private static readonly Dictionary<string, string> Executables = new Dictionary<string, string>
-        {
-            {"Habinet", "Habinet.Core.dll"},
-            {"Habinet.Notifications", "Habinet.Notifications.exe"}
-        };
+                                                                         {
+                                                                             { "Habinet", "Habinet.Core.dll" },
+                                                                             { "Habinet.Notifications", "Habinet.Notifications.exe" }
+                                                                         };
 
         public static string GetExecutablePath(string installDirectoryPath, string packageId, string version)
         {

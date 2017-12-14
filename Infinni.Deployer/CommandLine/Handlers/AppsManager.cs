@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 
@@ -8,12 +9,12 @@ namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class AppsManager
     {
-        private readonly AppSettings _appSettings;
-
         public AppsManager(AppSettings appSettings)
         {
             _appSettings = appSettings;
         }
+
+        private readonly AppSettings _appSettings;
 
         public bool IsInstalled(string appName, string appVersion)
         {

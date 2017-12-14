@@ -67,7 +67,6 @@ namespace Infinni.Deployer.Nuget
             {
                 throw new ArgumentException("PackageId should be specified.");
             }
-            
         }
     }
 }

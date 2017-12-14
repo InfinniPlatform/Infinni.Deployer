@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
+
 using Infinni.Deployer.Settings;
+
 using NuGet.Configuration;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
@@ -18,7 +20,9 @@ namespace Infinni.Deployer.Nuget
         }
 
         public Lazy<INuGetResourceProvider>[] ResourceProviders { get; }
+
         public Lazy<PackageSource> PackageSource { get; }
+
         public Lazy<ISettings> Configuration { get; }
     }
 }
