@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 
 using NuGet.PackageManagement;
@@ -26,7 +27,7 @@ namespace Infinni.Deployer.Nuget
         private readonly AppSettings _appSettings;
         private readonly NugetSettings _nugetSettings;
 
-        public async Task Install(string packageId, string version)
+        public async Task Install(AppInfo appInfo)
         {
             var sourceRepository = new SourceRepository(_nugetSettings.PackageSource.Value, _nugetSettings.ResourceProviders);
             var sourceRepositoryProvider = new SourceRepositoryProvider(_nugetSettings.Configuration.Value, _nugetSettings.ResourceProviders);
@@ -35,11 +36,11 @@ namespace Infinni.Deployer.Nuget
             var nuGetPackageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings.Configuration.Value, PackagesFolderPath)
                                           { PackagesFolderNuGetProject = project };
 
-            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, false, false, VersionConstraints.None);
+            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, true, false, VersionConstraints.None);
             var emptyNuGetProjectContext = new EmptyNuGetProjectContext();
             var sourceRepositories = Array.Empty<SourceRepository>();
 
-            await nuGetPackageManager.InstallPackageAsync(project, new PackageIdentity(packageId, NuGetVersion.Parse(version)), resolutionContext, emptyNuGetProjectContext, sourceRepository, sourceRepositories, CancellationToken.None);
+            await nuGetPackageManager.InstallPackageAsync(project, new PackageIdentity(appInfo.PackageId, NuGetVersion.Parse(appInfo.Version)), resolutionContext, emptyNuGetProjectContext, sourceRepository, sourceRepositories, CancellationToken.None);
         }
     }
 }

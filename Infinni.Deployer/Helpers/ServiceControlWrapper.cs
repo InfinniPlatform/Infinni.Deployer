@@ -10,32 +10,32 @@
         private const string WindowsServiceOption = "--windows-service";
         private const string SetWorkingDirectoryOption = "--set-working-directory";
 
-        public void Create(string packageId, string version, string executablePath)
+        public void Create(AppInfo appInfo, string executablePath)
         {
             var arguments = executablePath.EndsWith(".exe")
-                ? $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\""
-                : $"create {packageId}.{version} DisplayName= \"{packageId}.{version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\"";
+                ? $"create {appInfo.PackageId}.{appInfo.Version} DisplayName= \"{appInfo.PackageId}.{appInfo.Version}\" binpath= \"{executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\""
+                : $"create {appInfo.PackageId}.{appInfo.Version} DisplayName= \"{appInfo.PackageId}.{appInfo.Version}\" binpath= \"{DotnetExecutable} {executablePath} {WindowsServiceOption} {SetWorkingDirectoryOption}\"";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Create), arguments);
         }
 
-        public void Delete(string packageId, string version)
+        public void Delete(AppInfo appInfo)
         {
-            var arguments = $"delete {packageId}.{version}";
+            var arguments = $"delete {appInfo.PackageId}.{appInfo.Version}";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Delete), arguments);
         }
 
-        public void Start(string packageId, string version)
+        public void Start(AppInfo appInfo)
         {
-            var arguments = $"start {packageId}.{version}";
+            var arguments = $"start {appInfo.PackageId}.{appInfo.Version}";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Start), arguments);
         }
 
-        public void Stop(string packageId, string version)
+        public void Stop(AppInfo appInfo)
         {
-            var arguments = $"stop {packageId}.{version}";
+            var arguments = $"stop {appInfo.PackageId}.{appInfo.Version}";
 
             ProcessExecutor.Execute(ScExecutable, nameof(Stop), arguments);
         }

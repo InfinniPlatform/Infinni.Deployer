@@ -28,27 +28,29 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public async Task Handle(InstallOptions options)
         {
-            var packageId = options.PackageId;
-            var version = options.Version;
+            foreach (var fullName in options.PackageFullNames)
+            {
+                var appInfo = AppInfo.FromPath(fullName);
 
-            CheckExistingInstallation(packageId, version);
+                CheckExistingInstallation(appInfo);
 
-            Log.Information("Installing application {PackageId}.{Version}.", packageId, version);
-            await _nugetPackageInstaller.Install(packageId, version);
-            Log.Information("Application {PackageId}.{Version} successfully installed.", packageId, version);
+                Log.Information("Installing application {PackageId}.{Version}.", appInfo.PackageId, appInfo.Version);
+                await _nugetPackageInstaller.Install(appInfo);
+                Log.Information("Application {PackageId}.{Version} successfully installed.", appInfo.PackageId, appInfo.Version);
 
-            var binPath = Apps.GetExecutablePath(_appSettings.InstallDirectoryPath, packageId, version);
+                var binPath = Apps.GetExecutablePath(_appSettings.InstallDirectoryPath, appInfo);
 
-            _systemServiceManager.Create(packageId, version, binPath);
+                _systemServiceManager.Create(appInfo, binPath);
+            }
         }
 
-        private void CheckExistingInstallation(string packageId, string version)
+        private void CheckExistingInstallation(AppInfo appInfo)
         {
-            var appDirectoryPath = Path.Combine(_appSettings.InstallDirectoryPath, Apps.GetAppFullName(packageId, version));
+            var appDirectoryPath = Path.Combine(_appSettings.InstallDirectoryPath, appInfo.ToString());
 
             if (Directory.Exists(appDirectoryPath))
             {
-                Log.Error("Application {PackageId}.{Version} already installed.", packageId, version);
+                Log.Error("Application {PackageId}.{Version} already installed.", appInfo.PackageId, appInfo.Version);
                 throw new Exception();
             }
         }

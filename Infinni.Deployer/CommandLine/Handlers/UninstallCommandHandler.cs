@@ -24,23 +24,39 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public Task Handle(UninstallOptions options)
         {
-            var appDirectoryName = Apps.GetAppFullName(options.PackageId, options.Version);
-
-            var installDirectoryPath = Path.GetFullPath(_appSettings.InstallDirectoryPath);
-
-            var appDirectoryPath = Path.Combine(installDirectoryPath, appDirectoryName);
-
-            try
+            foreach (var fullName in options.PackageFullNames)
             {
-                Log.Information("Deleting application {PackageId} {Version}", options.PackageId, options.Version);
+                var appInfo = AppInfo.FromPath(fullName);
 
-                Directory.Delete(appDirectoryPath, true);
+                var installDirectoryPath = Path.GetFullPath(_appSettings.InstallDirectoryPath);
 
-                _systemServiceManager.Delete(options.PackageId, options.Version);
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error(e, "Uninstall command executed with error.");
+                var appDirectoryPath = Path.Combine(installDirectoryPath, fullName);
+
+                try
+                {
+                    Log.Information("Deleting application {PackageId} {Version}", appInfo.PackageId, appInfo.Version);
+
+                    try
+                    {
+                        _systemServiceManager.Stop(appInfo);
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                    
+
+                    if (Directory.Exists(appDirectoryPath))
+                    {
+                        Directory.Delete(appDirectoryPath, true);
+                    }
+
+                    _systemServiceManager.Delete(appInfo);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger.Error(e, "Uninstall command executed with error.");
+                }
             }
 
             return Task.CompletedTask;

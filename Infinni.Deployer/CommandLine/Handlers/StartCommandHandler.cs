@@ -6,6 +6,9 @@ using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 
+using NuGet.Configuration;
+using NuGet.Versioning;
+
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
@@ -28,7 +31,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             if (Directory.Exists(appPath) && Directory.EnumerateFileSystemEntries(appPath).Any())
             {
-                _systemServiceManager.Start(options.PackageId, options.Version);
+                _systemServiceManager.Start(new AppInfo(options.PackageId, options.Version));
 
                 return Task.CompletedTask;
             }

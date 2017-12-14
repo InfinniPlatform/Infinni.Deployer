@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Infinni.Deployer.CommandLine.Options;
+using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
 
@@ -42,7 +43,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
                 {
                     foreach (var appInfo in apps.Where(app => Directory.EnumerateFileSystemEntries(app.InstallPath)
                                                                        .Any())
-                                                .OrderBy(app => app.Name))
+                                                .OrderBy(app => app.PackageId))
                     {
                         Log.Information("{AppsInfo}", JsonConvert.SerializeObject(appInfo, Formatting.Indented));
                     }

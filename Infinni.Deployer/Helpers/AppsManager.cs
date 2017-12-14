@@ -2,10 +2,9 @@
 using System.IO;
 using System.Linq;
 
-using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Settings;
 
-namespace Infinni.Deployer.CommandLine.Handlers
+namespace Infinni.Deployer.Helpers
 {
     public class AppsManager
     {
@@ -16,11 +15,11 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         private readonly AppSettings _appSettings;
 
-        public bool IsInstalled(string appName, string appVersion)
+        public bool IsInstalled(AppInfo appInfo)
         {
             EnsureInstallDirectory();
 
-            return Directory.Exists(GetFullPath(appName, appVersion));
+            return Directory.Exists(Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), appInfo.ToString()));
         }
 
         public IEnumerable<AppInfo> GetAppsList()
@@ -29,7 +28,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             var appDirectories = Directory.GetDirectories(_appSettings.InstallDirectoryPath);
 
-            var appInfos = appDirectories.Select(Apps.GetInfoByPath);
+            var appInfos = appDirectories.Select(AppInfo.FromPath);
 
             return appInfos;
         }
@@ -40,8 +39,8 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             var appDirectories = Directory.GetDirectories(_appSettings.InstallDirectoryPath);
 
-            var appInfos = appDirectories.Select(Apps.GetInfoByPath)
-                                         .Where(i => i.Name == appName);
+            var appInfos = appDirectories.Select(AppInfo.FromPath)
+                                         .Where(i => i.PackageId == appName);
 
             return appInfos;
         }
@@ -52,11 +51,6 @@ namespace Infinni.Deployer.CommandLine.Handlers
             {
                 Directory.CreateDirectory(_appSettings.InstallDirectoryPath);
             }
-        }
-
-        private string GetFullPath(string appName, string appVersion)
-        {
-            return Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), Apps.GetAppFullName(appName, appVersion));
         }
     }
 }

@@ -13,11 +13,11 @@ namespace Infinni.Deployer.Helpers
         private const string DotnetExecutable = "/usr/bin/dotnet";
         private const string ServicesPath = "/lib/systemd/system/";
 
-        public void Create(string packageId, string version, string executablePath)
+        public void Create(AppInfo appInfo, string executablePath)
         {
             if (executablePath.EndsWith("exe"))
             {
-                throw new ArgumentException($"Aplication {packageId} is incompatible with Linux.");
+                throw new ArgumentException($"Aplication {appInfo.PackageId} is incompatible with Linux.");
             }
 
             string template;
@@ -32,7 +32,7 @@ namespace Infinni.Deployer.Helpers
                                          .Replace("{{appExecutablePath}}", executablePath)
                                          .Replace("{{workingDirectory}}", Path.GetDirectoryName(executablePath));
 
-            var serviceFileName = GetServiceFileName(packageId, version);
+            var serviceFileName = GetServiceFileName(appInfo);
 
             using (var fileStream = File.Create(Path.Combine(ServicesPath, serviceFileName)))
             using (var streamWriter = new StreamWriter(fileStream))
@@ -44,35 +44,35 @@ namespace Infinni.Deployer.Helpers
             ProcessExecutor.Execute(SystemCtlExecutable, nameof(Create), $"enable {serviceFileName}");
         }
 
-        public void Delete(string packageId, string version)
+        public void Delete(AppInfo appInfo)
         {
-            var serviceName = GetServiceName(packageId, version);
-            var serviceFileName = GetServiceFileName(packageId, version);
+            var serviceName = GetServiceName(appInfo);
+            var serviceFileName = GetServiceFileName(appInfo);
 
             ProcessExecutor.Execute(SystemCtlExecutable, nameof(Delete), $"disable {serviceName}");
             File.Delete(Path.Combine(ServicesPath, serviceFileName));
         }
 
-        public void Start(string packageId, string version)
+        public void Start(AppInfo appInfo)
         {
-            var serviceName = GetServiceName(packageId, version);
+            var serviceName = GetServiceName(appInfo);
             ProcessExecutor.Execute(SystemCtlExecutable, nameof(Start), $"start {serviceName}");
         }
 
-        public void Stop(string packageId, string version)
+        public void Stop(AppInfo appInfo)
         {
-            var serviceName = GetServiceName(packageId, version);
+            var serviceName = GetServiceName(appInfo);
             ProcessExecutor.Execute(SystemCtlExecutable, nameof(Stop), $"stop {serviceName}");
         }
 
-        private static string GetServiceName(string packageId, string version)
+        private static string GetServiceName(AppInfo appInfo)
         {
-            return $"{packageId}.{version}".ToLowerInvariant();
+            return $"{appInfo.PackageId}.{appInfo.Version}".ToLowerInvariant();
         }
 
-        private static string GetServiceFileName(string packageId, string version)
+        private static string GetServiceFileName(AppInfo appInfo)
         {
-            return $"{GetServiceName(packageId, version)}.service";
+            return $"{GetServiceName(appInfo)}.service";
         }
     }
 }

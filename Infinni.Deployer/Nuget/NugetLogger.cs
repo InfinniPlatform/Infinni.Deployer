@@ -2,7 +2,7 @@
 
 using ILogger = NuGet.Common.ILogger;
 
-namespace Infinni.Deployer.Logging
+namespace Infinni.Deployer.Nuget
 {
     public class NugetLogger : ILogger
     {

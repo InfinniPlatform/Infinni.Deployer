@@ -9,7 +9,6 @@ using Autofac;
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
-using Infinni.Deployer.Logging;
 using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
 
@@ -68,7 +67,7 @@ namespace Infinni.Deployer.IoC
         public static void InitializeLogger()
         {
             Log.Logger = new LoggerConfiguration()
-                         .MinimumLevel.Debug()
+                         .MinimumLevel.Information()
                          .WriteTo.Console()
                          .WriteTo.RollingFile(Path.Combine("logs", "events-{Date}.log"))
                          .CreateLogger();

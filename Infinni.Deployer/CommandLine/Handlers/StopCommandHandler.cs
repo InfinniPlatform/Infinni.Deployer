@@ -18,11 +18,13 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         public Task Handle(StopOptions options)
         {
-            var appDirectoryName = Apps.GetAppFullName(options.PackageId, options.Version);
+            var appInfo = new AppInfo(options.PackageId, options.Version);
+
+            var appDirectoryName = appInfo.ToString();
 
             Log.Information("Stopping application {AppDirectoryName}", appDirectoryName);
-
-            _systemServiceManager.Stop(options.PackageId, options.Version);
+            
+            _systemServiceManager.Stop(appInfo);
 
             return Task.CompletedTask;
         }

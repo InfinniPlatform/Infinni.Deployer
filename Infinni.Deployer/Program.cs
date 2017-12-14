@@ -9,6 +9,7 @@ using CommandLine;
 
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
+using Infinni.Deployer.Helpers;
 using Infinni.Deployer.IoC;
 
 using Serilog;

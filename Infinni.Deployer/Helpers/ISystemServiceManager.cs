@@ -11,27 +11,27 @@
         /// <param name="packageId">App package id.</param>
         /// <param name="version">App package version.</param>
         /// <param name="executablePath">Path to application executable file.</param>
-        void Create(string packageId, string version, string executablePath);
+        void Create(AppInfo appInfo, string executablePath);
 
         /// <summary>
         /// Delete service/daemon for application.
         /// </summary>
         /// <param name="packageId">App package id.</param>
         /// <param name="version">App package version.</param>
-        void Delete(string packageId, string version);
+        void Delete(AppInfo appInfo);
 
         /// <summary>
         /// Start service/daemon for application.
         /// </summary>
         /// <param name="packageId">App package id.</param>
         /// <param name="version">App package version.</param>
-        void Start(string packageId, string version);
+        void Start(AppInfo appInfo);
 
         /// <summary>
         /// Stop service/daemon for application.
         /// </summary>
         /// <param name="packageId">App package id.</param>
         /// <param name="version">App package version.</param>
-        void Stop(string packageId, string version);
+        void Stop(AppInfo appInfo);
     }
 }
