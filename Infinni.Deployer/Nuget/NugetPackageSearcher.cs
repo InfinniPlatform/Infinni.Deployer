@@ -1,17 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using NuGet.Protocol.Core.Types;
+
 using Serilog;
+
 using ILogger = NuGet.Common.ILogger;
 
 namespace Infinni.Deployer.Nuget
 {
     public class NugetPackageSearcher
     {
-        private readonly ILogger _logger;
-        private readonly NugetSettings _nugetSettings;
-
         public NugetPackageSearcher(NugetSettings nugetSettings,
                                     ILogger logger)
         {
@@ -19,16 +20,20 @@ namespace Infinni.Deployer.Nuget
             _logger = logger;
         }
 
+        private readonly ILogger _logger;
+        private readonly NugetSettings _nugetSettings;
+
         public async Task Search(string packageId, int count, bool includePrerelease)
         {
-            Log.Information("Searching last {Count} versions of {PackageId} app in {Source}", count, packageId, _nugetSettings.PackageSource.Value.SourceUri);
+            EnsurePackageId(packageId);
+
+            Log.Information("Searching last {Take} versions of {PackageId} app in {Source}", count, packageId, _nugetSettings.PackageSource.Value.SourceUri);
 
             var sourceRepository = new SourceRepository(_nugetSettings.PackageSource.Value, _nugetSettings.ResourceProviders);
 
             var packageMetadataResource = await sourceRepository.GetResourceAsync<PackageMetadataResource>();
 
-            var searchMetadata = (await packageMetadataResource.GetMetadataAsync(packageId, includePrerelease, false, _logger, CancellationToken.None))
-                .ToArray();
+            var searchMetadata = (await packageMetadataResource.GetMetadataAsync(packageId, includePrerelease, false, _logger, CancellationToken.None)).ToArray();
 
             Log.Information("Found {TotalCount}:", searchMetadata.Length);
 
@@ -54,6 +59,15 @@ namespace Infinni.Deployer.Nuget
                     Log.Information("{PackageId}.{Version}.", metadata.Identity.Id, metadata.Identity.Version);
                 }
             }
+        }
+
+        private static void EnsurePackageId(string packageId)
+        {
+            if (string.IsNullOrEmpty(packageId))
+            {
+                throw new ArgumentException("PackageId should be specified.");
+            }
+            
         }
     }
 }

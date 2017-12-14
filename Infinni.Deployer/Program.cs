@@ -51,8 +51,6 @@ namespace Infinni.Deployer
                     return AppBuilder.Resolver.Resolve<ICommandHandler<InstallOptions>>().Handle(installOptions);
                 case ListOptions listOptions:
                     return AppBuilder.Resolver.Resolve<ICommandHandler<ListOptions>>().Handle(listOptions);
-                case AppsOptions appsOptions:
-                    return AppBuilder.Resolver.Resolve<ICommandHandler<AppsOptions>>().Handle(appsOptions);
                 case UninstallOptions uninstallOptions:
                     return AppBuilder.Resolver.Resolve<ICommandHandler<UninstallOptions>>().Handle(uninstallOptions);
                 case StartOptions startOptions:
