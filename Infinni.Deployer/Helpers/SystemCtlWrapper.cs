@@ -67,7 +67,7 @@ namespace Infinni.Deployer.Helpers
 
         private static string GetServiceName(AppInfo appInfo)
         {
-            return $"{appInfo.PackageId}.{appInfo.Version}".ToLowerInvariant();
+            return $"{appInfo}".ToLowerInvariant();
         }
 
         private static string GetServiceFileName(AppInfo appInfo)

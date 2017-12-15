@@ -32,34 +32,43 @@ namespace Infinni.Deployer.CommandLine.Handlers
         {
             if (options.ShowInstalled)
             {
-                _appsManager.EnsureInstallDirectory();
-
-                var apps = _appsManager.GetAppsList().ToArray();
-
-                Log.Information("Found {DirectoriesCount} installed apps in {InstallDirectoryPath}.", apps.Length,
-                                Path.GetFullPath(_appSettings.InstallDirectoryPath));
-
-                if (apps.Length > 0)
-                {
-                    foreach (var appInfo in apps.Where(app => Directory.EnumerateFileSystemEntries(app.InstallPath)
-                                                                       .Any())
-                                                .OrderBy(app => app.PackageId))
-                    {
-                        Log.Information("{AppsInfo}", JsonConvert.SerializeObject(appInfo, Formatting.Indented));
-                    }
-                }
+                ShowInstalled();
 
                 return;
             }
 
             if (options.ShowAvailable)
             {
-                await _nugetPackageSearcher.Search(options.PackageId, options.Take, options.IncludePrerelease);
+                await ShowAvailable(options);
 
                 return;
             }
 
-            Log.Error("Filter should be specified (--available or --installed).");
+            ShowInstalled();
+        }
+
+        private void ShowInstalled()
+        {
+            _appsManager.EnsureInstallDirectory();
+
+            var apps = _appsManager.GetAppsList().ToArray();
+
+            Log.Information("Found {DirectoriesCount} installed apps in {InstallDirectoryPath}.", apps.Length,
+                            Path.GetFullPath(_appSettings.InstallDirectoryPath));
+
+            if (apps.Length > 0)
+            {
+                foreach (var appInfo in apps.Where(app => Directory.EnumerateFileSystemEntries(Apps.GetAppPath(_appSettings.InstallDirectoryPath, app)).Any())
+                                            .OrderBy(app => app.PackageId))
+                {
+                    Log.Information("{AppsInfo}", JsonConvert.SerializeObject(appInfo, Formatting.Indented));
+                }
+            }
+        }
+
+        private async Task ShowAvailable(ListOptions options)
+        {
+            await _nugetPackageSearcher.Search(options.PackageId, options.Take, options.IncludePrerelease);
         }
     }
 }

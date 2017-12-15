@@ -1,21 +1,25 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
+using Infinni.Deployer.Settings;
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class StopCommandHandler : ICommandHandler<StopOptions>
     {
+        private readonly AppSettings _appSettings;
         private readonly AppsManager _appsManager;
-
         private readonly ISystemServiceManager _systemServiceManager;
 
         public StopCommandHandler(ISystemServiceManager systemServiceManager,
+                                  AppSettings appSettings,
                                   AppsManager appsManager)
         {
             _systemServiceManager = systemServiceManager;
+            _appSettings = appSettings;
             _appsManager = appsManager;
         }
 
@@ -33,6 +37,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
             else
             {
                 var appsList = _appsManager.GetAppsList();
+
                 foreach (var appInfo in appsList)
                 {
                     StopApp(appInfo);
@@ -44,11 +49,16 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         private void StopApp(AppInfo appInfo)
         {
-            var appDirectoryName = appInfo.ToString();
+            var appPath = Path.Combine(_appSettings.InstallDirectoryPath, appInfo.ToString());
 
-            Log.Information("Stopping application {AppDirectoryName}", appDirectoryName);
-
-            _systemServiceManager.Stop(appInfo);
+            if (Directory.Exists(appPath) && Directory.EnumerateFileSystemEntries(appPath).Any())
+            {
+                _systemServiceManager.Stop(appInfo);
+            }
+            else
+            {
+                Log.Information("Directory {AppPath} is empty.", appPath);
+            }
         }
     }
 }

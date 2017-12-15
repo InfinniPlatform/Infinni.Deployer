@@ -9,7 +9,6 @@ using CommandLine;
 
 using Infinni.Deployer.CommandLine.Handlers;
 using Infinni.Deployer.CommandLine.Options;
-using Infinni.Deployer.Helpers;
 using Infinni.Deployer.IoC;
 
 using Serilog;
@@ -28,7 +27,7 @@ namespace Infinni.Deployer
                               {
                                   if (task.IsFaulted)
                                   {
-                                      Log.Error(task.Exception, "{Exception}");
+                                      Log.Error("{Exception}", task.Exception);
                                   }
                               })
                 .Wait();

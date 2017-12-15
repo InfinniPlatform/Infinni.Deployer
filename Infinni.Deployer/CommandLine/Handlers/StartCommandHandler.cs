@@ -38,6 +38,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
             else
             {
                 var appsList = _appsManager.GetAppsList();
+
                 foreach (var appInfo in appsList)
                 {
                     StartApp(appInfo);
@@ -55,8 +56,10 @@ namespace Infinni.Deployer.CommandLine.Handlers
             {
                 _systemServiceManager.Start(appInfo);
             }
-
-            Log.Information("Directory {AppPath} is empty.", appPath);
+            else
+            {
+                Log.Information("Directory {AppPath} is empty.", appPath);
+            }
         }
     }
 }
