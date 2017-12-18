@@ -1,25 +1,38 @@
 # Infinni.Deployer
 
-## Получение списка доступных версий приложения
+## Commands
 
-`deployer list -i App -v 1.0.0.0`
+### List
 
-## Получение списка установленных приложений
+`deployer list App --available` - lists available versions of application package
 
-`deployer apps -i App -v 1.0.0.0`
+`deployer list App --available --prerelease` - lists available prerelese versions of application package (e.g App.1.2.3.4-prerelease)
 
-## Установка приложения
+`deployer list App --installed` - lists installed application packages
 
-`deployer install -i App -v 1.0.0.0`
+`deployer list App --installed --prerelease` - lists installed prerelese application packages (e.g App.1.2.3.4-prerelease)
 
-## Запуск приложения
+### Install
 
-`deployer start -i App -v 1.0.0.0`
+`deployer install App.1.2.3.4` - installs application package
 
-## Остановка приложения
+`deployer install App.1.2.3.4 App2.1.2.3.4 App3.1.2.3.4` - installs multiple application packages
 
-`deployer stop -i App -v 1.0.0.0`
+### Start
 
-## Удаление приложения
+`deployer start App.1.2.3.4` - starts installed application package
 
-`deployer uninstall -i App -v 1.0.0.0`
+`deployer start App.1.2.3.4 App2.1.2.3.4 App3.1.2.3.4` - starts multiple installed application packages
+
+### Stop
+
+`deployer stop App.1.2.3.4` - stop installed application package
+
+`deployer stop App.1.2.3.4 App2.1.2.3.4 App3.1.2.3.4` - stop multiple installed application packages
+
+
+### Delete
+
+`deployer uninstall App.1.2.3.4` - uninstalls installed application package
+
+`deployer uninstall App.1.2.3.4 App2.1.2.3.4 App3.1.2.3.4` - uninstalls multiple installed application packages
