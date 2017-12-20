@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Infinni.Deployer": {
-      "commandName": "Project",
-      "commandLineArgs": "install Habinet.2.2.0.336 Habinet.Notifications.2.2.0.336"
+      "commandName": "Project"
     }
   }
 }

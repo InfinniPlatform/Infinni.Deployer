@@ -5,26 +5,24 @@ using System.Threading.Tasks;
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Nuget;
-using Infinni.Deployer.Settings;
-
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class InstallCommandHandler : ICommandHandler<InstallOptions>
     {
-        public InstallCommandHandler(AppSettings appSettings,
-                                     NugetPackageInstaller nugetPackageInstaller,
-                                     ISystemServiceManager systemServiceManager)
+        public InstallCommandHandler(NugetPackageInstaller nugetPackageInstaller,
+                                     ISystemServiceManager systemServiceManager,
+                                     AppsManager appsManager)
         {
-            _appSettings = appSettings;
             _nugetPackageInstaller = nugetPackageInstaller;
             _systemServiceManager = systemServiceManager;
+            _appsManager = appsManager;
         }
 
-        private readonly AppSettings _appSettings;
         private readonly NugetPackageInstaller _nugetPackageInstaller;
         private readonly ISystemServiceManager _systemServiceManager;
+        private readonly AppsManager _appsManager;
 
         public async Task Handle(InstallOptions options)
         {
@@ -38,7 +36,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
                 await _nugetPackageInstaller.Install(appInfo);
                 Log.Information("Application {PackageId}.{Version} successfully installed.", appInfo.PackageId, appInfo.Version);
 
-                var binPath = Apps.GetExecutablePath(_appSettings.InstallDirectoryPath, appInfo);
+                var binPath = _appsManager.GetExecutablePath(appInfo);
 
                 _systemServiceManager.Create(appInfo, binPath);
             }
@@ -46,9 +44,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
         private void CheckExistingInstallation(AppInfo appInfo)
         {
-            var appDirectoryPath = Path.Combine(_appSettings.InstallDirectoryPath, appInfo.ToString());
-
-            if (Directory.Exists(appDirectoryPath))
+            if (_appsManager.IsInstalled(appInfo))
             {
                 Log.Error("Application {PackageId}.{Version} already installed.", appInfo.PackageId, appInfo.Version);
                 throw new Exception();

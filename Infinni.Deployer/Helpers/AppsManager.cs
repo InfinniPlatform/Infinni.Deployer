@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Infinni.Deployer.Settings;
 
 namespace Infinni.Deployer.Helpers
 {
     public class AppsManager
     {
+        private readonly AppSettings _appSettings;
+
         public AppsManager(AppSettings appSettings)
         {
             _appSettings = appSettings;
         }
-
-        private readonly AppSettings _appSettings;
 
         public bool IsInstalled(AppInfo appInfo)
         {
@@ -51,6 +50,16 @@ namespace Infinni.Deployer.Helpers
             {
                 Directory.CreateDirectory(_appSettings.InstallDirectoryPath);
             }
+        }
+
+        public string GetExecutablePath(AppInfo appInfo)
+        {
+            return Path.Combine(GetAppPath(appInfo), _appSettings.PackageExecutables[appInfo.PackageId]);
+        }
+
+        public string GetAppPath(AppInfo appInfo)
+        {
+            return Path.Combine(Path.GetFullPath(_appSettings.InstallDirectoryPath), appInfo.ToString());
         }
     }
 }

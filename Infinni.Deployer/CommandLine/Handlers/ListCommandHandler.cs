@@ -1,20 +1,22 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Nuget;
 using Infinni.Deployer.Settings;
-
 using Newtonsoft.Json;
-
 using Serilog;
 
 namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class ListCommandHandler : ICommandHandler<ListOptions>
     {
+        private readonly AppSettings _appSettings;
+
+        private readonly AppsManager _appsManager;
+        private readonly NugetPackageSearcher _nugetPackageSearcher;
+
         public ListCommandHandler(NugetPackageSearcher nugetPackageSearcher,
                                   AppsManager appsManager,
                                   AppSettings appSettings)
@@ -23,10 +25,6 @@ namespace Infinni.Deployer.CommandLine.Handlers
             _appsManager = appsManager;
             _appSettings = appSettings;
         }
-
-        private readonly AppsManager _appsManager;
-        private readonly AppSettings _appSettings;
-        private readonly NugetPackageSearcher _nugetPackageSearcher;
 
         public async Task Handle(ListOptions options)
         {
@@ -58,7 +56,7 @@ namespace Infinni.Deployer.CommandLine.Handlers
 
             if (apps.Length > 0)
             {
-                foreach (var appInfo in apps.Where(app => Directory.EnumerateFileSystemEntries(Apps.GetAppPath(_appSettings.InstallDirectoryPath, app)).Any())
+                foreach (var appInfo in apps.Where(app => Directory.EnumerateFileSystemEntries(_appsManager.GetAppPath(app)).Any())
                                             .OrderBy(app => app.PackageId))
                 {
                     Log.Information("{AppsInfo}", JsonConvert.SerializeObject(appInfo, Formatting.Indented));
