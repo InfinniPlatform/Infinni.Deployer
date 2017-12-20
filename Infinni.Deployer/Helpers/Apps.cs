@@ -5,10 +5,13 @@ namespace Infinni.Deployer.Helpers
 {
     public static class Apps
     {
+        // TODO Move to config file.
         private static readonly Dictionary<string, string> Executables = new Dictionary<string, string>
         {
             {"Habinet", "Habinet.Core.dll"},
-            {"Habinet.Notifications", "Habinet.Notifications.exe"}
+            {"Habinet.Notifications", "Habinet.Notifications.exe"},
+            {"AwesomeMoscow", "Habinet.Core.dll"},
+            {"AwesomeMoscow.Notifications", "Habinet.Notifications.exe"}
         };
 
         public static string GetExecutablePath(string installDirectoryPath, AppInfo appInfo)
