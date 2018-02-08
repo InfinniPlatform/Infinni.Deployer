@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
-
 using Infinni.Deployer.CommandLine.Options;
 using Infinni.Deployer.Helpers;
 using Infinni.Deployer.Nuget;
@@ -11,6 +9,11 @@ namespace Infinni.Deployer.CommandLine.Handlers
 {
     public class InstallCommandHandler : ICommandHandler<InstallOptions>
     {
+        private readonly AppsManager _appsManager;
+
+        private readonly NugetPackageInstaller _nugetPackageInstaller;
+        private readonly ISystemServiceManager _systemServiceManager;
+
         public InstallCommandHandler(NugetPackageInstaller nugetPackageInstaller,
                                      ISystemServiceManager systemServiceManager,
                                      AppsManager appsManager)
@@ -20,21 +23,18 @@ namespace Infinni.Deployer.CommandLine.Handlers
             _appsManager = appsManager;
         }
 
-        private readonly NugetPackageInstaller _nugetPackageInstaller;
-        private readonly ISystemServiceManager _systemServiceManager;
-        private readonly AppsManager _appsManager;
-
         public async Task Handle(InstallOptions options)
         {
             foreach (var fullName in options.PackageFullNames)
             {
-                var appInfo = AppInfo.FromPath(fullName);
+                var path = fullName;
+                var appInfo = AppInfo.FromPath(path);
 
                 CheckExistingInstallation(appInfo);
 
-                Log.Information("Installing application {PackageId}.{Version}.", appInfo.PackageId, appInfo.Version);
+                Log.Information("Installing application {FullAppName}.", appInfo.ToString());
                 await _nugetPackageInstaller.Install(appInfo);
-                Log.Information("Application {PackageId}.{Version} successfully installed.", appInfo.PackageId, appInfo.Version);
+                Log.Information("Application {FullAppName} successfully installed.", appInfo.ToString());
 
                 var binPath = _appsManager.GetExecutablePath(appInfo);
 

@@ -5,7 +5,7 @@ namespace Infinni.Deployer.CommandLine.Options
     [Verb("list", HelpText = "List available versions of application package.")]
     public class ListOptions : ICommandOptions
     {
-        [Value(0)]
+        [Value(0, HelpText = "Full package name, e.g. AwesomePackage.1.2.3.4@InstanceName.")]
         public string PackageId { get; set; }
 
         [Option('i', "installed", HelpText = "List installed packages.")]
