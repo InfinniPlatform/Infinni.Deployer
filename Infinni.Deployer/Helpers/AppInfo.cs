@@ -6,7 +6,7 @@ namespace Infinni.Deployer.Helpers
 {
     public class AppInfo
     {
-        private static readonly Regex AppFullNameRegex = new Regex("(?!.*\\\\)(?<packageId>.+)\\.(?<version>\\d+\\.\\d+\\.\\d+\\.\\d+)(?<prerelease>\\-.+)?\\@(?<instance>.+)", RegexOptions.Compiled);
+        private static readonly Regex AppFullNameRegex = new Regex("(?!.*\\\\)(?<packageId>.+)\\.(?<version>\\d+\\.\\d+\\.\\d+\\.\\d+)(?<prerelease>\\-.+)?\\@?(?<instance>.+)?", RegexOptions.Compiled);
 
         public string PackageId { get; set; }
 
